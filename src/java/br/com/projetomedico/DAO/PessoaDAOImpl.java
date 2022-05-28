@@ -5,7 +5,10 @@ import br.com.projetomedico.util.ConnectionFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PessoaDAOImpl implements GenericDAO {
 
@@ -38,7 +41,7 @@ public class PessoaDAOImpl implements GenericDAO {
                 idPessoa = rs.getInt("idpessoa");
             }
         } catch (Exception ex) {
-            System.out.println("Problemas ao cadastrar Pessoa! Erro: " + ex.getMessage());
+            System.out.println("Problemas ao editar Pessoa! Erro: " + ex.getMessage());
             ex.printStackTrace();
         } finally {
             try {
@@ -65,13 +68,41 @@ public class PessoaDAOImpl implements GenericDAO {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public Boolean alterar(Object Object) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Boolean alterar(Pessoa pessoa) {
+        
+            PreparedStatement stmt = null;
+            String sql = "update pessoa set nome = ?, endereco = ? where idpessoa = ?;";
+        
+        try {
+            stmt.setString(1, pessoa.getNome());
+            stmt.setString(2, pessoa.getEndereco());
+            stmt.execute();
+            return true;
+        } catch (Exception ex) {
+            System.out.println("Problemas ao alterar Pessoa! Erro: " + ex.getMessage());
+            ex.printStackTrace();
+            return false;
+        } finally {
+            try {
+                ConnectionFactory.closeConnection(conn, stmt);
+            } catch (Exception e) {
+                System.out.println("Problemas ao fechar a conexão! Erro: "
+                        + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        
+            
+
     }
 
     @Override
     public Boolean cadastrar(Object object) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Boolean alterar(Object object) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

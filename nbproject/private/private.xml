@@ -3,15 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/gabri/Documents/NetBeansProjects/ProjetoMedico/src/java/br/com/projetomedico/controller/ListarMedico.java</file>
-            <file>file:/C:/Users/gabri/Documents/NetBeansProjects/ProjetoMedico/web/listarmedico.jsp</file>
-            <file>file:/C:/Users/gabri/Documents/NetBeansProjects/ProjetoMedico/src/java/br/com/projetomedico/model/Especialidade.java</file>
-            <file>file:/C:/Users/gabri/Documents/NetBeansProjects/ProjetoMedico/src/java/br/com/projetomedico/DAO/PessoaDAOImpl.java</file>
-            <file>file:/C:/Users/gabri/Documents/NetBeansProjects/ProjetoMedico/src/java/br/com/projetomedico/DAO/MedicoDAOImpl.java</file>
-            <file>file:/C:/Users/gabri/Documents/NetBeansProjects/ProjetoMedico/web/index.jsp</file>
-            <file>file:/C:/Users/gabri/Documents/NetBeansProjects/ProjetoMedico/web/cadastrarmedico.jsp</file>
-            <file>file:/C:/Users/gabri/Documents/NetBeansProjects/ProjetoMedico/src/java/br/com/projetomedico/controller/CadastrarMedico.java</file>
-            <file>file:/C:/Users/gabri/Documents/NetBeansProjects/ProjetoMedico/src/java/br/com/projetomedico/controller/CarregarEspecialidade.java</file>
+            <file>file:/C:/Users/gabri/Desktop/ProjetoMedico/src/java/br/com/projetomedico/controller/CarregarMedico.java</file>
+            <file>file:/C:/Users/gabri/Desktop/ProjetoMedico/web/editarmedico.jsp</file>
+            <file>file:/C:/Users/gabri/Desktop/ProjetoMedico/src/java/br/com/projetomedico/model/Pessoa.java</file>
+            <file>file:/C:/Users/gabri/Desktop/ProjetoMedico/src/java/br/com/projetomedico/model/Medico.java</file>
+            <file>file:/C:/Users/gabri/Desktop/ProjetoMedico/src/java/br/com/projetomedico/DAO/MedicoDAOImpl.java</file>
+            <file>file:/C:/Users/gabri/Desktop/ProjetoMedico/src/java/br/com/projetomedico/controller/EditarMedico.java</file>
+            <file>file:/C:/Users/gabri/Desktop/ProjetoMedico/src/java/br/com/projetomedico/model/Especialidade.java</file>
         </group>
     </open-files>
 </project-private>

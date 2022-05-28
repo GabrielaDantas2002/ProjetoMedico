@@ -17,6 +17,12 @@ public class Especialidade {
         this.nomeEspecialidade = especialidade;
     }
 
+    public Especialidade(Integer idEspecialidade) {
+        this.idEspecialidade = idEspecialidade;
+    }
+    
+    
+
     public Integer getIdEspecialidade() {
         return idEspecialidade;
     }

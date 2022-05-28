@@ -30,8 +30,9 @@
                 <td align="center"><%=medico.getIdMedico()%></td>
                 <td align="center"><%=medico.getNome()%></td>
                 <td align="center"><%=medico.getCRM()%></td>
-                <td align="center"><%=medico.getEspecialidade()%></td>
+                <td align="center"><%=medico.getEspecialidade().getNomeEspecialidade()%></td>
                 <td align="center"><%=medico.getEndereco()%></td>
+                <td align="center"><a href="CarregarMedico?idMedico=<%=medico.getIdMedico()%>">Editar</a></td>
             </tr>
             <%
                 }

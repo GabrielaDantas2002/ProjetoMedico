@@ -60,8 +60,9 @@ public class MedicoDAOImpl implements GenericDAO {
         List<Object> medicos = new ArrayList();
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        
-        String sql = "select * from pessoa p inner join medico m on p.idpessoa = m.idpessoa inner join especialidade e on m.idespecialidade = e.idespecialidade";
+
+        String sql = "select m.idmedico, p.nome, m.crm, p.endereco, e.nomeespecialidade from pessoa p \n"
+                + "inner join medico m on p.idpessoa = m.idpessoa inner join especialidade e on m.idespecialidade = e.idespecialidade";
         try {
             stmt = conn.prepareStatement(sql);
             rs = stmt.executeQuery();
@@ -70,12 +71,13 @@ public class MedicoDAOImpl implements GenericDAO {
                 Medico medico = new Medico();
                 medico.setIdMedico(rs.getInt("idmedico"));
                 medico.setNome(rs.getString("nome"));
+                medico.setCRM(rs.getInt("crm"));
                 medico.setEndereco(rs.getString("endereco"));
                 medico.setEspecialidade(new Especialidade(rs.getString("nomeespecialidade")));
                 medicos.add(medico);
             }
         } catch (SQLException ex) {
-            System.out.println("Problemas ao listar produtos! Erro:" + ex.getMessage());
+            System.out.println("Problemas ao listar médicos! Erro:" + ex.getMessage());
             ex.printStackTrace();
 
         } finally {
@@ -90,7 +92,7 @@ public class MedicoDAOImpl implements GenericDAO {
     }
 
     @Override
-     public Boolean excluir(int idOject) {
+    public Boolean excluir(int idOject) {
         PreparedStatement stmt = null;
         String sql = "delete from pessoa where idpessoa = ?;";
         try {
@@ -99,7 +101,7 @@ public class MedicoDAOImpl implements GenericDAO {
             stmt.executeUpdate();
             return true;
         } catch (Exception ex) {
-            System.out.println("Problemas ao excluir o produto! Erro" 
+            System.out.println("Problemas ao excluir o produto! Erro"
                     + ex.getMessage());
             ex.printStackTrace();
             return false;
@@ -114,47 +116,52 @@ public class MedicoDAOImpl implements GenericDAO {
     }
 
     @Override
-    public Object carregar(int idObject) {
+    public Object carregar(int idMedico) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        Pessoa pessoa = null;
+        Medico medico = new Medico();
         
-        String sql = "select * from pessoa where idpessoa = ?;";
+
+        String sql = "select m.idmedico, p.nome, m.crm, p.endereco, e.idespecialidade, e.nomeespecialidade from pessoa p inner join medico m on p.idpessoa = m.idpessoa inner join especialidade e on m.idespecialidade = e.idespecialidade where idmedico = ?";
         try {
+
             stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, idObject);
+            stmt.setInt(1, idMedico);
             rs = stmt.executeQuery();
-            while (rs.next()) {
-                pessoa = new Pessoa();
-                pessoa.setIdPessoa(rs.getInt("idpessoa"));
-                pessoa.setNome(rs.getString("nome"));
-                pessoa.setEndereco(rs.getString("endereco"));
+
+            if (rs.next()) {
+
+                medico.setIdMedico(rs.getInt("idmedico"));
+                medico.setNome(rs.getString("nome"));
+                medico.setCRM(rs.getInt("crm"));
+                medico.setEndereco(rs.getString("endereco"));
+                medico.setEspecialidade(new Especialidade(rs.getInt("idespecialidade"),rs.getString("nomeespecialidade")));
             }
         } catch (SQLException ex) {
-            System.out.println("Problemas ao carregar pessoa! Erro: " + ex.getMessage());
+            System.out.println("Problemas ao carregar médicos na DAO! Erro:" + ex.getMessage());
             ex.printStackTrace();
+
         } finally {
             try {
                 ConnectionFactory.closeConnection(conn, stmt, rs);
             } catch (Exception e) {
-                System.out.println("Problemas ao fechar a conexão! Erro: " + e.getMessage());
+                System.out.println("Problemas ao fechar a conexão! Erro" + e.getMessage());
                 e.printStackTrace();
             }
         }
-        return pessoa;
+        return medico;
     }
 
     @Override
     public Boolean alterar(Object object) {
-        Pessoa pessoa = (Pessoa) object;
+        Medico medico = (Medico) object;
         PreparedStatement stmt = null;
-        String sql = "update pessoa set nome = ?, endereco = ? where idpessoa = ?;";
+        String sql = "update medico set crm = ? where idmedico = ?; update pessoa set nome = ? from pessoa as p inner join medico m on m.idpessoa = p.idpessoa where m.idmedico = ?";
         try {
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, pessoa.getNome());
-            stmt.setString(2, pessoa.getEndereco());
-            stmt.setInt(5, pessoa.getIdPessoa());
-            stmt.executeUpdate();
+            stmt.setInt(1, medico.getCRM());
+            stmt.setInt(2, medico.getEspecialidade().getIdEspecialidade());
+            stmt.setString(3, medico.getNome());
+            stmt.execute();
             return true;
         } catch (Exception ex) {
             System.out.println("Problemas ao alterar Pessoa! Erro: " + ex.getMessage());
