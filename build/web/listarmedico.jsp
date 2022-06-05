@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page import="br.com.projetomedico.model.Medico"%>
 <%@page import="java.util.List"%>
 <!DOCTYPE html>
@@ -14,12 +15,13 @@
                 <td colspan="11" align="center">Lista de Médicos</td>
             </tr>
             <tr>
+                <th align="center">ID Pessoa</th>
                 <th align="center">ID Medico</th>
                 <th align="center">Nome</th>
+                <th align="center">Endereço</th>
                 <th align="center">CRM</th>
                 <th align="center">Especialidade</th>
-                <th align="center">Endereço</th>
-                <th align="center" colspan="2">Editar</th>
+                <!--<th align="center" colspan="2">Editar</th>-->
             </tr>
             
             <%
@@ -27,12 +29,14 @@
                 for(Medico medico:medicos){
             %>
             <tr>
+                <td align="center"><%=medico.getIdPessoa()%></td>
                 <td align="center"><%=medico.getIdMedico()%></td>
                 <td align="center"><%=medico.getNome()%></td>
+                <td align="center"><%=medico.getEndereco()%></td>
                 <td align="center"><%=medico.getCRM()%></td>
                 <td align="center"><%=medico.getEspecialidade().getNomeEspecialidade()%></td>
-                <td align="center"><%=medico.getEndereco()%></td>
-                <td align="center"><a href="CarregarMedico?idMedico=<%=medico.getIdMedico()%>">Editar</a></td>
+                <td align="center"><a href="CarregarMedico?idPessoa=<%=medico.getIdPessoa()%>">Editar</a></td>
+                <td align="center"><a href="ExcluirMedico?idPessoa=<%=medico.getIdPessoa()%>">Excluir</a></td>
             </tr>
             <%
                 }

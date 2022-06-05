@@ -15,6 +15,11 @@ public class Pessoa {
         this.Endereco = Endereco;
     }
 
+    public Pessoa(Integer idPessoa) {
+        this.idPessoa = idPessoa;
+    }
+
+    
     public Integer getIdPessoa() {
         return idPessoa;
     }

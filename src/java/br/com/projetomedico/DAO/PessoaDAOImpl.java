@@ -16,7 +16,7 @@ public class PessoaDAOImpl implements GenericDAO {
 
     public PessoaDAOImpl() throws Exception {
         try {
-            this.conn = (Connection) ConnectionFactory.getConnection();
+            this.conn = ConnectionFactory.getConnection();
             System.out.println("Conectado com sucesso!");
         } catch (Exception ex) {
             throw new Exception(ex.getMessage());
@@ -50,7 +50,8 @@ public class PessoaDAOImpl implements GenericDAO {
                 System.out.println("Problemas ao fechar a conexão! Erro: " + ex.getMessage());
                 ex.printStackTrace();
             }
-        } return idPessoa;
+        }
+        return idPessoa;
     }
 
     @Override
@@ -69,16 +70,17 @@ public class PessoaDAOImpl implements GenericDAO {
     }
 
     public Boolean alterar(Pessoa pessoa) {
-        
-            PreparedStatement stmt = null;
-            String sql = "update pessoa set nome = ?, endereco = ? where idpessoa = ?;";
-        
+        PreparedStatement stmt = null;
+        String sql = "update pessoa set nome = ?, endereco = ? where idpessoa = ?;";
+
         try {
+            stmt = conn.prepareStatement(sql);
             stmt.setString(1, pessoa.getNome());
             stmt.setString(2, pessoa.getEndereco());
-            stmt.execute();
+            stmt.setInt(3, pessoa.getIdPessoa());
+            stmt.executeUpdate();
             return true;
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             System.out.println("Problemas ao alterar Pessoa! Erro: " + ex.getMessage());
             ex.printStackTrace();
             return false;
@@ -89,10 +91,14 @@ public class PessoaDAOImpl implements GenericDAO {
                 System.out.println("Problemas ao fechar a conexão! Erro: "
                         + e.getMessage());
                 e.printStackTrace();
+            }finally {
+            try {
+                ConnectionFactory.closeConnection(conn, stmt);
+            } catch (Exception ex) {
+                System.out.println("Problemas ao fechar os perâmetros de conexão! Erro" + ex.getMessage());
             }
         }
-        
-            
+        }
 
     }
 

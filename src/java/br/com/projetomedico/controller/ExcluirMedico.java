@@ -2,8 +2,6 @@ package br.com.projetomedico.controller;
 
 import br.com.projetomedico.DAO.GenericDAO;
 import br.com.projetomedico.DAO.MedicoDAOImpl;
-import br.com.projetomedico.model.Especialidade;
-import br.com.projetomedico.model.Medico;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -12,47 +10,34 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "CadastrarMedico", urlPatterns = {"/CadastrarMedico"})
-public class CadastrarMedico extends HttpServlet {
+@WebServlet(name = "ExcluirMedico", urlPatterns = {"/ExcluirMedico"})
+public class ExcluirMedico extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            
-            Especialidade especialidade = new Especialidade();
-
-            String nome = request.getParameter("Nome");
-            String endereco = request.getParameter("Endereco");
-            Integer crm = Integer.parseInt(request.getParameter("CRM"));
-            especialidade.setIdEspecialidade(Integer.parseInt(request.getParameter("especialidade")));
-            
+        try ( PrintWriter out = response.getWriter()) {
+            int idPessoa = Integer.parseInt(request.getParameter("idPessoa"));
             String mensagem = null;
-
-            Medico medico = new Medico();
-            medico.setNome(nome);
-            medico.setEndereco(endereco);
-            medico.setCRM(crm);
-            medico.setEspecialidade(especialidade);
-
-            try {
+            try{
                 GenericDAO dao = new MedicoDAOImpl();
-                if (dao.cadastrar(medico)) {
-                    mensagem = "Médico cadastrado com sucesso!";
-                } else {
-                    mensagem = "Problemas ao cadastrar médico. "
-                            + "Verifique os dados informados e tente novamente!";
+                if(dao.excluir(idPessoa)){
+                    mensagem = "Médico excluído com sucesso!";
+                }else{
+                    mensagem = "Problemas ao excluir médico!";
                 }
                 request.setAttribute("mensagem", mensagem);
-                request.getRequestDispatcher("CarregarEspecialidade").forward(request, response);
-            } catch (Exception ex) {
-                System.out.println("Problemas no Servlet ao cadastrar médico! Erro: "
-                        + ex.getMessage());
-                ex.printStackTrace();
+                request.getRequestDispatcher("ListarMedico").forward(request, response);
+            }catch(Exception e){
+                System.out.println("Problemas no Servlet ao excluir o médico! "
+                        + "Erro: " + e.getMessage());
+                e.printStackTrace();
             }
 
+            
         }
-    }
+        }
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

@@ -19,21 +19,23 @@ public class EditarMedico extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try ( PrintWriter out = response.getWriter()) {
-
-            Especialidade especialidade = new Especialidade();
-
+            
+            Integer idPessoa = Integer.parseInt(request.getParameter("idPessoa"));
+            Integer idMedico = Integer.parseInt(request.getParameter("idMedico"));
             String nome = request.getParameter("nome");
             String endereco = request.getParameter("endereco");
-            Integer crm = Integer.parseInt(request.getParameter("crm"));
-            especialidade.setIdEspecialidade(Integer.parseInt(request.getParameter("especialidade")));
+            Integer crm = Integer.parseInt(request.getParameter("CRM"));
+            Integer especialidade = Integer.parseInt(request.getParameter("especialidade"));
 
             String mensagem = null;
 
             Medico medico = new Medico();
+            medico.setIdPessoa(idPessoa);
+            medico.setIdMedico(idMedico);
             medico.setNome(nome);
             medico.setEndereco(endereco);
             medico.setCRM(crm);
-            medico.setEspecialidade(new Especialidade (especialidade.getIdEspecialidade()));
+            medico.setEspecialidade(new Especialidade(especialidade));
 
             try {
                 GenericDAO dao = new MedicoDAOImpl();
@@ -44,7 +46,7 @@ public class EditarMedico extends HttpServlet {
                             + "Verifique os dados informados e tente novamente!";
                 }
                 request.setAttribute("mensagem", mensagem);
-                request.getRequestDispatcher("CarregarEspecialidade").forward(request, response);
+                request.getRequestDispatcher("ListarMedico").forward(request, response);
             } catch (Exception ex) {
                 System.out.println("Problemas no Servlet ao editar médico! Erro: "
                         + ex.getMessage());

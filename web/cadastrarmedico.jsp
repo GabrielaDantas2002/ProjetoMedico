@@ -18,15 +18,15 @@
                 </tr>
                 <tr>
                     <td>Nome:</td>
-                    <td><input type="text" name="nome"></td>
+                    <td><input type="text" name="Nome"></td>
                 </tr>
                 <tr>
                     <td>Endereço:</td>
-                    <td><input type="text" name="endereco"></td>
+                    <td><input type="text" name="Endereco"></td>
                 </tr>
                 <tr>
                     <td>CRM:</td>
-                    <td><input type="text" name="crm"></td>
+                    <td><input type="text" name="CRM"></td>
                 </tr>
                 <tr>
                     <td>Especialidade:</td>

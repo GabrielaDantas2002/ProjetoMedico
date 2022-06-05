@@ -61,7 +61,7 @@ public class MedicoDAOImpl implements GenericDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
-        String sql = "select m.idmedico, p.nome, m.crm, p.endereco, e.nomeespecialidade from pessoa p \n"
+        String sql = "select m.idmedico, p.nome, m.crm, p.endereco, p.idpessoa, e.nomeespecialidade from pessoa p \n"
                 + "inner join medico m on p.idpessoa = m.idpessoa inner join especialidade e on m.idespecialidade = e.idespecialidade";
         try {
             stmt = conn.prepareStatement(sql);
@@ -69,11 +69,12 @@ public class MedicoDAOImpl implements GenericDAO {
 
             while (rs.next()) {
                 Medico medico = new Medico();
-                medico.setIdMedico(rs.getInt("idmedico"));
-                medico.setNome(rs.getString("nome"));
-                medico.setCRM(rs.getInt("crm"));
-                medico.setEndereco(rs.getString("endereco"));
+                medico.setIdMedico(rs.getInt("idMedico"));
+                medico.setNome(rs.getString("Nome"));
+                medico.setCRM(rs.getInt("CRM"));
+                medico.setEndereco(rs.getString("Endereco"));
                 medico.setEspecialidade(new Especialidade(rs.getString("nomeespecialidade")));
+                medico.setIdPessoa(rs.getInt("idPessoa"));
                 medicos.add(medico);
             }
         } catch (SQLException ex) {
@@ -94,14 +95,15 @@ public class MedicoDAOImpl implements GenericDAO {
     @Override
     public Boolean excluir(int idOject) {
         PreparedStatement stmt = null;
-        String sql = "delete from pessoa where idpessoa = ?;";
+        String sql = "delete from medico where idpessoa = ?; delete from pessoa where idpessoa = ?";
         try {
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, idOject);
+            stmt.setInt(2, idOject);
             stmt.executeUpdate();
             return true;
         } catch (Exception ex) {
-            System.out.println("Problemas ao excluir o produto! Erro"
+            System.out.println("Problemas ao excluir o médico! Erro"
                     + ex.getMessage());
             ex.printStackTrace();
             return false;
@@ -116,26 +118,31 @@ public class MedicoDAOImpl implements GenericDAO {
     }
 
     @Override
-    public Object carregar(int idMedico) {
+    public Object carregar(int idObject) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        Medico medico = new Medico();
+        Medico medico = null;
         
 
-        String sql = "select m.idmedico, p.nome, m.crm, p.endereco, e.idespecialidade, e.nomeespecialidade from pessoa p inner join medico m on p.idpessoa = m.idpessoa inner join especialidade e on m.idespecialidade = e.idespecialidade where idmedico = ?";
+        String sql = "select p.idpessoa, m.idmedico, p.nome, p.endereco, m.crm, e.idespecialidade, "
+                + "e.nomeespecialidade from pessoa p inner join medico m on p.idpessoa = m.idpessoa "
+                + "inner join especialidade e on m.idespecialidade = e.idespecialidade "
+                + "where p.idpessoa = ?";
         try {
 
             stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, idMedico);
+            stmt.setInt(1, idObject);
             rs = stmt.executeQuery();
 
-            if (rs.next()) {
-
+            while (rs.next()) {
+                medico = new Medico();
+                medico.setIdPessoa(rs.getInt("idpessoa"));
                 medico.setIdMedico(rs.getInt("idmedico"));
                 medico.setNome(rs.getString("nome"));
-                medico.setCRM(rs.getInt("crm"));
                 medico.setEndereco(rs.getString("endereco"));
+                medico.setCRM(rs.getInt("crm"));
                 medico.setEspecialidade(new Especialidade(rs.getInt("idespecialidade"),rs.getString("nomeespecialidade")));
+                System.out.println("medico setado na DAO");
             }
         } catch (SQLException ex) {
             System.out.println("Problemas ao carregar médicos na DAO! Erro:" + ex.getMessage());
@@ -156,13 +163,18 @@ public class MedicoDAOImpl implements GenericDAO {
     public Boolean alterar(Object object) {
         Medico medico = (Medico) object;
         PreparedStatement stmt = null;
-        String sql = "update medico set crm = ? where idmedico = ?; update pessoa set nome = ? from pessoa as p inner join medico m on m.idpessoa = p.idpessoa where m.idmedico = ?";
+        String sql = "update medico set crm = ?, idespecialidade = ? where idpessoa = ?;";
         try {
+            stmt = conn.prepareStatement(sql);
             stmt.setInt(1, medico.getCRM());
             stmt.setInt(2, medico.getEspecialidade().getIdEspecialidade());
-            stmt.setString(3, medico.getNome());
-            stmt.execute();
-            return true;
+            stmt.setInt(3, medico.getIdPessoa());
+            if (new PessoaDAOImpl().alterar(medico)){
+                stmt.executeUpdate();
+                return true;
+            } else {
+                return false;
+            }
         } catch (Exception ex) {
             System.out.println("Problemas ao alterar Pessoa! Erro: " + ex.getMessage());
             ex.printStackTrace();

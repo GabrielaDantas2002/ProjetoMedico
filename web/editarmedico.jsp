@@ -15,6 +15,15 @@
             <table align="center">
                 <tr>
                     <th>Editar cadastro de Médicos</th>
+                </tr
+                
+                <tr>
+                    <td>ID Pessoa:</td>
+                    <td><input type="text" name="idPessoa" value="${medico.idPessoa}" readonly="true"></td>
+                </tr>
+                      <tr>
+                    <td>ID Médico:</td>
+                    <td><input type="text" name="idMedico" value="${medico.idMedico}" readonly="true"></td>
                 </tr>
                 <tr>
                     <td>Nome:</td>
@@ -26,18 +35,17 @@
                 </tr>
                 <tr>
                     <td>CRM:</td>
-                    <td><input type="text" name="crm" value="${medico.CRM}"></td>
+                    <td><input type="text" name="CRM" value="${medico.CRM}"></td>
                 </tr>
                 <tr>
                     <td>Especialidade:</td>
                     <td>
                         <select name="especialidade">
-                            <option selected value="${medico.especialidade.idEspecialidade}">${medico.especialidade.nomeEspecialidade}</option>
+                          <option selected value="${medico.especialidade.idEspecialidade}">${medico.especialidade.nomeEspecialidade}</option>
 
-                            <c:forEach var = "especialidade" items = "${especialidades}">
+                           <c:forEach var = "especialidade" items = "${especialidades}">
                                 <option value="${especialidade.idEspecialidade}">${especialidade.nomeEspecialidade}</option>
-
-                            </c:forEach>
+                           </c:forEach>
                         </select>
                     </td>
                 </tr>

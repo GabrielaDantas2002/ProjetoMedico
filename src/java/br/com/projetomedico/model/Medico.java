@@ -8,6 +8,8 @@ public class Medico extends Pessoa {
 
     public Medico() {
     }
+    
+    
 
     public Medico(Integer idMedico, Integer CRM, Especialidade especialidade) {
         this.idMedico = idMedico;

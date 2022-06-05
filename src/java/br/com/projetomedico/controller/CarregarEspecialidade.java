@@ -22,7 +22,7 @@ public class CarregarEspecialidade extends HttpServlet {
                
                request.setAttribute("especialidades", dao.listar());
                request.getRequestDispatcher("cadastrarmedico.jsp").forward(request, response);
-           }catch (Exception e){
+               }catch (Exception e){
                System.out.println("Problemas ao listar especialidades. Erro: " + e.getMessage());
            }
         }
